@@ -15,13 +15,12 @@ import { images } from '@/constants';
 import { styled } from 'nativewind';
 import * as SplashScreen from 'expo-splash-screen';
 
-import PostActivity from '@/components/PostActivity';
+import FeedActivity from '@/components/common/FeedActivity';
 
 const GradientBackground = styled(LinearGradient)
 const StyledSafeAreaView = styled(SafeAreaView)
 
 const Home = () => {
-    const [rememberMe, setRememberMe] = useState(false);
 
     return (
         <GradientBackground
@@ -66,7 +65,8 @@ const Home = () => {
                     </ScrollView>
 
                     {/* Post Activity */}
-                    <PostActivity />
+                    <FeedActivity />
+                    
 
                 </ScrollView>
             </StyledSafeAreaView>
@@ -74,4 +74,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default Home;
