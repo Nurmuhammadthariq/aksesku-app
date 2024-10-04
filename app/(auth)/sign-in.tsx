@@ -1,26 +1,78 @@
-import { useState, useEffect } from 'react';
+import { useState, useContext } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useForm, Controller } from 'react-hook-form'
+import { router } from 'expo-router';
 import {
     View,
     Text,
     TextInput,
     TouchableOpacity,
     Image,
-    Pressable,
-    ScrollView,
-    SafeAreaView
+    SafeAreaView,
+    ActivityIndicator,
+    Button
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome } from '@expo/vector-icons';
 import { images } from '@/constants';
 import { styled } from 'nativewind';
 import * as SplashScreen from 'expo-splash-screen';
+import * as Yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { CredentialDto } from '../../libs/dto/auth-dto';
+import { AuthContext } from '../../context';
+
+import { useSignInMutation } from '../../graphql';
 
 SplashScreen.preventAutoHideAsync();
 const GradientBackground = styled(LinearGradient)
 const StyledSafeAreaView = styled(SafeAreaView)
 
+const schema = Yup.object().shape({
+    username: Yup.string().required('Username harus diisi'),
+    password: Yup.string().required('Password harus diisi'),
+})
+
+
 const SignIn = () => {
     const [rememberMe, setRememberMe] = useState(false);
+    const { signIn } = useContext(AuthContext)
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+
+    } = useForm({
+        resolver: yupResolver(schema),
+        defaultValues: {
+            username: '',
+            password: ''
+        }
+    });
+
+
+    const [login, { loading, error }] = useSignInMutation({
+        onCompleted: e => {
+            signIn(e.authSignIn.token)
+        },
+        onError: error => {
+            console.log(error)
+        },
+
+    })
+
+    const onSubmit = (data: CredentialDto) => {
+        // console.log(data)
+        login({ variables: data })
+    }
+
+    if (loading) {
+        return (
+            <View className='flex-1'>
+                <ActivityIndicator className='justify-center h-full' size="large" color="#0000ff" />
+            </View>
+        )
+    }
 
     return (
         <GradientBackground
@@ -50,40 +102,60 @@ const SignIn = () => {
                 <View className="space-y-4 font-PoppinsRegular">
                     <View
                         className='
-                                w-full 
-                                pt-[11px] 
-                                pl-[19px] 
-                                rounded-3xl 
-                                border-white 
-                                border-[3px] 
-                                shadow 
-                                h-[53px]
+                            w-full 
+                            pt-[11px] 
+                            pl-[19px] 
+                            rounded-3xl 
+                            border-white 
+                            border-[3px] 
+                            shadow 
+                            h-[53px]
                         '>
-                        <TextInput
-                            className="text-white text-base font-PoppinsRegular"
-                            placeholder="Masukan username disini"
-                            placeholderTextColor="white"
+                        <Controller
+                            name='username'
+                            control={control}
+                            render={({ field: { onChange, onBlur, value, ref } }) => (
+                                <TextInput
+                                    className="text-white text-base font-PoppinsRegular"
+                                    placeholder="Masukan username disini"
+                                    placeholderTextColor="white"
+                                    onBlur={onBlur}
+                                    onChangeText={onChange}
+                                    value={value}
+                                />
+                            )}
                         />
+                        {errors.username && <Text className='text-red-600 mt-2 font-bold'>{errors.username.message}</Text>}
                     </View>
 
                     {/* Input Password */}
                     <View
                         className="
-                                w-full 
-                                pt-[11px] 
-                                pl-[19px] 
-                                rounded-3xl 
-                                border-white 
-                                border-[3px] 
-                                shadow 
-                                h-[53px]
+                            w-full 
+                            pt-[11px] 
+                            pl-[19px] 
+                            rounded-3xl 
+                            border-white 
+                            border-[3px] 
+                            shadow 
+                            h-[53px]
                         ">
-                        <TextInput
-                            className="text-white text-base font-PoppinsRegular"
-                            placeholder="Masukan password"
-                            secureTextEntry={true}
-                            placeholderTextColor="white"
+                        <Controller
+                            name='password'
+                            control={control}
+                            render={({ field: { onChange, onBlur, value, ref } }) => (
+                                <TextInput
+                                    className="text-white text-base font-PoppinsRegular"
+                                    placeholder="Masukan password"
+                                    secureTextEntry={true}
+                                    placeholderTextColor="white"
+                                    onBlur={onBlur}
+                                    onChangeText={onChange}
+                                    value={value}
+                                />
+                            )}
                         />
+                        {errors.password && <Text className='text-red-600 mt-2 font-bold'>{errors.password.message}</Text>}
                         <TouchableOpacity className="absolute right-4 top-4">
                             <FontAwesome name="eye" size={20} color="gray" />
                         </TouchableOpacity>
@@ -107,7 +179,7 @@ const SignIn = () => {
                     </View>
 
                     {/* Button sign in */}
-                    <TouchableOpacity className="bg-[#635A8F] rounded-full py-4 mt-6 shadow-lg">
+                    <TouchableOpacity onPress={handleSubmit(onSubmit)} className="bg-[#635A8F] rounded-full py-4 mt-6 shadow-lg">
                         <Text className="text-center text-white text-lg font-PoppinsBold">Sign in</Text>
                     </TouchableOpacity>
 

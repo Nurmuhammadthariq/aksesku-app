@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
     View,
     Text,
@@ -7,13 +7,14 @@ import {
     Image,
     Pressable,
     ScrollView,
+    ActivityIndicator
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { images } from '@/constants';
 import { styled } from 'nativewind';
-import * as SplashScreen from 'expo-splash-screen';
+import { AuthContext } from '../../../context';
 
 import FeedActivity from '@/components/common/FeedActivity';
 
@@ -21,6 +22,8 @@ const GradientBackground = styled(LinearGradient)
 const StyledSafeAreaView = styled(SafeAreaView)
 
 const Home = () => {
+    const { loading, user, token } = useContext(AuthContext)
+    // console.log(token)
 
     return (
         <GradientBackground
@@ -66,11 +69,10 @@ const Home = () => {
 
                     {/* Post Activity */}
                     <FeedActivity />
-                    
-
                 </ScrollView>
             </StyledSafeAreaView>
         </GradientBackground>
+
     )
 }
 

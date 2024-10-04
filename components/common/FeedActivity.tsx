@@ -1,5 +1,6 @@
 import React from 'react'
-import { TouchableOpacity, Text, ScrollView } from 'react-native'
+import { TouchableOpacity, Text, ScrollView, View, ActivityIndicator } from 'react-native'
+import { useQuery, gql } from '@apollo/client';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styled } from 'nativewind';
 import ImageSlider from './ImageSlider';
@@ -185,10 +186,78 @@ const dataFeeds: FeedType[] = [
 
 ]
 
+const GET_DATA = gql`
+    query kegiatanPenyuluhanPaginateListMobile($payload: KegiatanPenyuluhanPaginateListInputType!) {
+        kegiatanPenyuluhanPaginateListMobile(payload: $payload) {
+            pages
+            count
+            data {
+            id
+            jenis
+            date
+            createdAt
+            nama
+            deskripsi
+            linkFoto
+            likes
+            comments
+            user {
+                id
+                username
+                fullName
+                isAsesor
+                thumbnail
+            }
+            verifikasi
+            jenisMediaPenyuluhan {
+                id
+                nama
+            }
+            pending
+            tidakMemenuhiSyarat
+            statusVerifikasi
+            publish
+            jenisRccApi
+            bidang
+            durasi
+            namaOrganisasi
+            komunitas {
+                id
+                nama
+            }
+            jenisKegiatanPengembangan
+            fokusKegiatan
+            }
+        }
+    }
+`
+
 const FeedActivity = () => {
+    const { loading, error, data } = useQuery(GET_DATA, {
+        variables: {
+            payload: {
+                "filtered": [],
+                "page": 0,
+                "pageSize": 3,
+                "sorted": [],
+                "isApi": false,
+                "search": ""
+            }
+        }
+    })
+
+    if (loading) return (
+        <View className='flex-1'>
+            <ActivityIndicator className='justify-center h-full' size="large" color="#0000ff" />
+        </View>
+    )
+    
+    const dataCounselings: FeedType[] = data.kegiatanPenyuluhanPaginateListMobile.data;
+    // console.log(JSON.stringify(dataCounselings, null, "\t"))
+
     return (
         <SafeAreaView className='mt-0 mb-[35%] gap-5'>
-            {dataFeeds.map((feed) => (
+            {dataCounselings.map((feed) => (
                 <StyledScrollView key={feed.id} className='bg-[#8C63D8] rounded-xl p-4'>
                     <HeaderPost header={feed} />
                     
