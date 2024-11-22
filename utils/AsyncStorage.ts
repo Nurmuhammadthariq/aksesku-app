@@ -27,3 +27,11 @@ export const removeToken = async () => {
         console.log(error);
     }
 }
+
+export const setStaticData = async (value: any) => {
+    try {
+        await AsyncStorage.setItem('x-static', JSON.stringify(value));
+    } catch (error) {
+        console.error('Error setting item:', error);
+    }
+}
