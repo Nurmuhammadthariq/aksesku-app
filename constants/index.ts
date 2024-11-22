@@ -9,6 +9,7 @@ import imgPenyuluh2 from '@/assets/images/kegiatanPenyuluh2.jpg';
 import imgPenyuluh3 from '@/assets/images/kegiatanPenyuluh3.jpg';
 import userComment from '@/assets/images/userComment.png';
 import imageComment from '@/assets/images/imageComment.png';
+import imageNewKegiatanPenyuluhan from '@/assets/images/new-report-illustration.png';
 
 export const icons = {
   home,
@@ -24,5 +25,6 @@ export const images = {
   imgPenyuluh2,
   imgPenyuluh3,
   userComment,
-  imageComment
+  imageComment,
+  imageNewKegiatanPenyuluhan
 }
