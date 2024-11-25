@@ -13,7 +13,7 @@ import HomeScreen from "@/app/(root)/(tabs)/home";
 import ChatScreen from "@/app/(root)/(tabs)/chat";
 import ProfileScreen from "@/app/(root)/(tabs)/profile";
 import PustakaScreen from "@/app/(root)/(tabs)/pustaka";
-import CreateKegiatanPenyuluhanScreen from '../(tabs)/CreateKegiatanPenyuluhan'
+import CreateKegiatanPenyuluhanScreen from '@/app/(root)/(tabs)/CreateKegiatanPenyuluhan';
 import { KegiatanPenyuluhanContextProvider } from '@/context/kegiatan-penyuluhan/kegiatan-penyuluhan-context';
 
 const StyledView = styled(View)
