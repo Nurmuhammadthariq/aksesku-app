@@ -192,11 +192,11 @@ export type StaticDataQuery = { __typename?: 'Query' } & {
       SasaranObjectType,
       'id' | 'nama'
     > & {
-        ruangLingkup: { __typename?: 'IdNamaObjectType' } & Pick<
-          IdNamaObjectType,
-          'id' | 'nama'
-        >
-      }
+      ruangLingkup: { __typename?: 'IdNamaObjectType' } & Pick<
+        IdNamaObjectType,
+        'id' | 'nama'
+      >
+    }
   >
   ruangLingkupList: Array<
     { __typename?: 'IdNamaObjectType' } & Pick<IdNamaObjectType, 'id' | 'nama'>
@@ -262,11 +262,11 @@ export type SasaranListByRuangLingkupQuery = { __typename?: 'Query' } & {
       SasaranObjectType,
       'id' | 'nama'
     > & {
-        ruangLingkup: { __typename?: 'IdNamaObjectType' } & Pick<
-          IdNamaObjectType,
-          'id' | 'nama'
-        >
-      }
+      ruangLingkup: { __typename?: 'IdNamaObjectType' } & Pick<
+        IdNamaObjectType,
+        'id' | 'nama'
+      >
+    }
   >
 }
 export function useSasaranListByRuangLingkupQuery(
@@ -308,23 +308,23 @@ export type KegiatanPenyuluhanUpsertMutation = { __typename?: 'Mutation' } & {
     | 'jenisKegiatanPengembangan'
     | 'fokusKegiatan'
   > & {
-      user: { __typename?: 'UserIdentityObjectType' } & Pick<
-        UserIdentityObjectType,
-        'id' | 'username' | 'fullName' | 'isAsesor' | 'thumbnail'
+    user: { __typename?: 'UserIdentityObjectType' } & Pick<
+      UserIdentityObjectType,
+      'id' | 'username' | 'fullName' | 'isAsesor' | 'thumbnail'
+    >
+    jenisMediaPenyuluhan?: Maybe<
+      { __typename?: 'JenisMediaPenyuluhanObjectType' } & Pick<
+        JenisMediaPenyuluhanObjectType,
+        'id' | 'nama'
       >
-      jenisMediaPenyuluhan?: Maybe<
-        { __typename?: 'JenisMediaPenyuluhanObjectType' } & Pick<
-          JenisMediaPenyuluhanObjectType,
-          'id' | 'nama'
-        >
+    >
+    komunitas?: Maybe<
+      { __typename?: 'KegiatanPenyuluhanTinyObjectType' } & Pick<
+        KegiatanPenyuluhanTinyObjectType,
+        'id' | 'nama'
       >
-      komunitas?: Maybe<
-        { __typename?: 'KegiatanPenyuluhanTinyObjectType' } & Pick<
-          KegiatanPenyuluhanTinyObjectType,
-          'id' | 'nama'
-        >
-      >
-    }
+    >
+  }
 }
 
 export type KegiatanPenyuluhanUpdateInputType = {
@@ -476,13 +476,175 @@ export type KegiatanPenyuluhanUpsertMutationVariables = Exact<{
 // }
 
 export function useKegiatanPenyuluhanUpsertOfflineMutation(baseOptions?: Apollo.MutationHookOptions<
-    KegiatanPenyuluhanUpsertMutation,
-    KegiatanPenyuluhanUpsertMutationVariables
+  KegiatanPenyuluhanUpsertMutation,
+  KegiatanPenyuluhanUpsertMutationVariables
+>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<KegiatanPenyuluhanUpsertMutation, KegiatanPenyuluhanUpsertMutationVariables>(
+    KegiatanPenyuluhanUpsertDocument,
+    options
+  )
+}
+
+
+/**
+ * __useKegiatanPenyuluhanPaginateListMobileQuery__
+ *
+ * To run a query within a React component, call `useKegiatanPenyuluhanPaginateListMobileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useKegiatanPenyuluhanPaginateListMobileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useKegiatanPenyuluhanPaginateListMobileQuery({
+ *   variables: {
+ *      payload: // value for 'payload'
+ *   },
+ * });
+ */
+
+export type PaginateSortedParamInputType = {
+  id: Scalars['String']
+  desc?: Maybe<Scalars['Boolean']>
+}
+
+export type PaginateFilterParamInputType = {
+  id: Scalars['String']
+  value: Scalars['IntString']
+}
+
+export type KegiatanPenyuluhanPaginateListInputType = {
+  isApi?: Maybe<Scalars['Boolean']>
+  page: Scalars['Float']
+  pageSize: Scalars['Float']
+  sorted: Array<PaginateSortedParamInputType>
+  filtered: Array<PaginateFilterParamInputType>
+  search?: Maybe<Scalars['String']>
+}
+
+export type PaginateResponseKegiatanPenyuluhanBriefObjectType = {
+  __typename?: 'PaginateResponseKegiatanPenyuluhanBriefObjectType'
+  pages: Scalars['Float']
+  count: Scalars['Float']
+  data: Array<KegiatanPenyuluhanBriefObjectType>
+}
+
+export type KegiatanPenyuluhanPaginateListMobileQueryVariables = Exact<{
+  payload: KegiatanPenyuluhanPaginateListInputType
+}>
+export type KegiatanPenyuluhanPaginateListMobileQuery = {
+  __typename?: 'Query'
+} & {
+  kegiatanPenyuluhanPaginateListMobile: {
+    __typename?: 'PaginateResponseKegiatanPenyuluhanBriefObjectType'
+  } & Pick<
+    PaginateResponseKegiatanPenyuluhanBriefObjectType,
+    'pages' | 'count'
+  > & {
+    data: Array<
+      { __typename?: 'KegiatanPenyuluhanBriefObjectType' } & Pick<
+        KegiatanPenyuluhanBriefObjectType,
+        | 'id'
+        | 'jenis'
+        | 'date'
+        | 'createdAt'
+        | 'nama'
+        | 'deskripsi'
+        | 'linkFoto'
+        | 'likes'
+        | 'comments'
+        | 'verifikasi'
+        | 'pending'
+        | 'tidakMemenuhiSyarat'
+        | 'statusVerifikasi'
+        | 'publish'
+        | 'jenisRccApi'
+        | 'bidang'
+        | 'durasi'
+        | 'namaOrganisasi'
+        | 'jenisKegiatanPengembangan'
+        | 'fokusKegiatan'
+      > & {
+        user: { __typename?: 'UserIdentityObjectType' } & Pick<
+          UserIdentityObjectType,
+          'id' | 'username' | 'fullName' | 'isAsesor' | 'thumbnail'
+        >
+        jenisMediaPenyuluhan?: Maybe<
+          { __typename?: 'JenisMediaPenyuluhanObjectType' } & Pick<
+            JenisMediaPenyuluhanObjectType,
+            'id' | 'nama'
+          >
+        >
+        komunitas?: Maybe<
+          { __typename?: 'KegiatanPenyuluhanTinyObjectType' } & Pick<
+            KegiatanPenyuluhanTinyObjectType,
+            'id' | 'nama'
+          >
+        >
+      }
+    >
+  }
+}
+
+export const KegiatanPenyuluhanPaginateListMobileDocument = gql`
+  query kegiatanPenyuluhanPaginateListMobile(
+    $payload: KegiatanPenyuluhanPaginateListInputType!
+  ) {
+    kegiatanPenyuluhanPaginateListMobile(payload: $payload) {
+      pages
+      count
+      data {
+        id
+        jenis
+        date
+        createdAt
+        nama
+        deskripsi
+        linkFoto
+        likes
+        comments
+        user {
+          id
+          username
+          fullName
+          isAsesor
+          thumbnail
+        }
+        verifikasi
+        jenisMediaPenyuluhan {
+          id
+          nama
+        }
+        pending
+        tidakMemenuhiSyarat
+        statusVerifikasi
+        publish
+        jenisRccApi
+        bidang
+        durasi
+        namaOrganisasi
+        komunitas {
+          id
+          nama
+        }
+        jenisKegiatanPengembangan
+        fokusKegiatan
+      }
+    }
+  }
+`
+
+export function useKegiatanPenyuluhanPaginateListMobileQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    KegiatanPenyuluhanPaginateListMobileQuery,
+    KegiatanPenyuluhanPaginateListMobileQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<KegiatanPenyuluhanUpsertMutation,KegiatanPenyuluhanUpsertMutationVariables>(
-    KegiatanPenyuluhanUpsertDocument, 
-    options
-  )
+  return Apollo.useQuery<
+    KegiatanPenyuluhanPaginateListMobileQuery,
+    KegiatanPenyuluhanPaginateListMobileQueryVariables
+  >(KegiatanPenyuluhanPaginateListMobileDocument, options)
 }
