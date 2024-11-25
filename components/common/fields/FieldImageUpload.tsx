@@ -11,6 +11,7 @@ import {
 import { FormControl } from 'native-base';
 import * as ImagePicker from "expo-image-picker";
 import { useController, useFormContext } from 'react-hook-form';
+import type { ImagePickerAsset } from 'expo-image-picker';
 
 interface FieldImageUploadProps {
     name: string;
@@ -25,6 +26,27 @@ interface FileData {
     uri?: string;
     fileName?: string;
 }
+
+interface ExpectedFile extends Blob {
+    readonly lastModified: number;
+    readonly name: string;
+    readonly webkitRelativePath: string;
+}
+
+const converToFile =  async (file: ImagePickerAsset[]): Promise<ExpectedFile[]> => {
+    return Promise.all(
+        file.map(async (asset) => {
+            const response = await fetch(asset.uri);
+            const blob = await response.blob();
+            const fileData = new File([blob], asset.fileName || 'unknown.jpg', {
+                lastModified: Date.now(),
+                type: blob.type,
+            });
+            return fileData;
+        })
+    );
+}
+
 
 
 export const FieldImageUpload: React.FC<FieldImageUploadProps> = ({ name, label }) => {
@@ -53,20 +75,14 @@ export const FieldImageUpload: React.FC<FieldImageUploadProps> = ({ name, label 
 
         const newFiles = [];
         const newPreviewImages: FileData[] = [];
-
+        const convertedImage = await converToFile(result.assets)
         for (const asset of result.assets) {
             if (asset.uri) {
                 const fileName = asset.fileName || 'image.jpg';
                 const type = asset.type || 'image/jpeg';
                 const file = await uriToFile(asset.uri, fileName, type);
 
-                newFiles.push({
-                    lastModified: Date.now(),
-                    name: fileName,
-                    size: asset.fileSize,
-                    type,
-                    path: fileName
-                });
+                newFiles.push(file);
                 newPreviewImages.push({ 
                     uri: asset.uri, 
                     name: fileName, 
@@ -84,7 +100,7 @@ export const FieldImageUpload: React.FC<FieldImageUploadProps> = ({ name, label 
         onChange(newFiles);
     };
 
-    const uriToFile = async (uri: string, fileName: string, type: string) => {
+    const uriToFile = async (uri: string, fileName: string, type: string): Promise<File> => {
         const response = await fetch(uri);
         const blob = await response.blob();
         const file = new File([blob], fileName, { type });
