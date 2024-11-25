@@ -5,16 +5,15 @@ import {
     TextInput,
     TouchableOpacity,
     Image,
-    Pressable,
     ScrollView,
-    ActivityIndicator
+    StyleSheet,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { images } from '@/constants';
 import { styled } from 'nativewind';
-import { AuthContext } from '../../../context';
+import { useKegiatanPenyuluhanContext } from '@/context/kegiatan-penyuluhan/kegiatan-penyuluhan-context';
 
 import FeedActivity from '@/components/common/FeedActivity';
 
@@ -22,8 +21,12 @@ const GradientBackground = styled(LinearGradient)
 const StyledSafeAreaView = styled(SafeAreaView)
 
 const Home = () => {
-    const { loading, user, token } = useContext(AuthContext)
-    // console.log(token)
+
+    const { refetch } = useKegiatanPenyuluhanContext()
+
+    const reloadData = () => {
+        refetch()
+    }
 
     return (
         <GradientBackground
@@ -70,10 +73,37 @@ const Home = () => {
                     {/* Post Activity */}
                     <FeedActivity />
                 </ScrollView>
+                <TouchableOpacity style={styles.floatingButton} onPress={reloadData}>
+                    <Ionicons name='reload' size={24} color="white" />
+                </TouchableOpacity>
             </StyledSafeAreaView>
         </GradientBackground>
 
     )
 }
+
+const styles = StyleSheet.create({
+    floatingButton: {
+        position: 'absolute',
+        bottom: 100, // Adjust the position from the bottom
+        right: 20,  // Adjust the position from the right
+        backgroundColor: '#2196F3', // Button color
+        width: 60,                  // Button width
+        height: 60,                 // Button height
+        borderRadius: 30,           // Make it circular
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 5,               // Add shadow for Android
+        shadowColor: '#000',        // Shadow color for iOS
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 3,
+    },
+    buttonText: {
+        color: '#fff',              // Text color
+        fontSize: 24,               // Font size
+        fontWeight: 'bold',
+    },
+});
 
 export default Home;

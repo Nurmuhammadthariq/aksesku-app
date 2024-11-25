@@ -6,7 +6,7 @@ import { TimeUtils } from '@/utils/time-utils'
 const urlAkseskuApp = process.env.EXPO_PUBLIC_AKSESKU_URL_APP
 
 interface HeaderProps {
-    header: FeedType
+    header: any
 }
 
 const HeaderPost = ({ header }: HeaderProps) => {

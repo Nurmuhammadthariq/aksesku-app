@@ -10,7 +10,7 @@ const StyledView = styled(View)
 const StyledScrollView = styled(ScrollView)
 
 interface PropsImages {
-    images: string[]
+    images: any
 }
 
 const urlAkseskuApp = process.env.EXPO_PUBLIC_AKSESKU_URL_APP

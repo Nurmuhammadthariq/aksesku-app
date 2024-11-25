@@ -7,7 +7,7 @@ import { StyleSheet, ScrollView } from 'react-native';
 import BottomSheet, { BottomSheetView, BottomSheetModal, BottomSheetScrollView, BottomSheetFooter } from "@gorhom/bottom-sheet"
 
 interface FooterProps {
-    footer: FeedType
+    footer: any
 }
 
 const FooterPost = ({ footer }: FooterProps) => {

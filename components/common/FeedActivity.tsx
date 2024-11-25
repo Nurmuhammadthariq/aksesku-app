@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { TouchableOpacity, Text, ScrollView, View, ActivityIndicator } from 'react-native'
-import { useQuery, gql } from '@apollo/client';
+import { gql } from '@apollo/client';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styled } from 'nativewind';
+import { useKegiatanPenyuluhanContext } from '@/context/kegiatan-penyuluhan/kegiatan-penyuluhan-context';
 import ImageSlider from './ImageSlider';
 import HeaderPost from './HeaderPost';
 import FooterPost from './FooterPost';
+import { Button } from 'react-native';
 
 const StyledScrollView = styled(ScrollView)
 
@@ -186,7 +188,7 @@ const dataFeeds: FeedType[] = [
 
 ]
 
-const GET_DATA = gql`
+export const GET_DATA = gql`
     query kegiatanPenyuluhanPaginateListMobile($payload: KegiatanPenyuluhanPaginateListInputType!) {
         kegiatanPenyuluhanPaginateListMobile(payload: $payload) {
             pages
@@ -233,32 +235,24 @@ const GET_DATA = gql`
 `
 
 const FeedActivity = () => {
-    const { loading, error, data } = useQuery(GET_DATA, {
-        variables: {
-            payload: {
-                "filtered": [],
-                "page": 0,
-                "pageSize": 3,
-                "sorted": [],
-                "isApi": false,
-                "search": ""
-            }
-        }
-    })
+    const { items, refetch, loading, loadMore } = useKegiatanPenyuluhanContext()
 
-    if (loading) return (
-        <View className='flex-1'>
-            <ActivityIndicator className='justify-center h-full' size="large" color="#0000ff" />
-        </View>
-    )
+    const onLoadMore = () => {
+        loadMore()
+    }
     
-    const dataCounselings: FeedType[] = data.kegiatanPenyuluhanPaginateListMobile.data;
-    // console.log(JSON.stringify(dataCounselings, null, "\t"))
+    if (loading) {
+        return (
+            <View className='mt-0 mb-[35%] gap-5'>
+                <ActivityIndicator />
+            </View>
+        )
+    }
 
     return (
         <SafeAreaView className='mt-0 mb-[35%] gap-5'>
-            {dataCounselings.map((feed) => (
-                <StyledScrollView key={feed.id} className='bg-[#8C63D8] rounded-xl p-4'>
+            {items.map((feed) => (
+                <StyledScrollView key={feed.id} className='bg-[#8C63D8] rounded-xl p-4 bt'>
                     <HeaderPost header={feed} />
                     
                     <TouchableOpacity>
@@ -272,7 +266,10 @@ const FeedActivity = () => {
                     <FooterPost footer={feed} />
                 </StyledScrollView>
             ))}
-
+            
+            <View className='mt-5'>
+                <Button title='Load More' onPress={onLoadMore} />
+            </View>
         </SafeAreaView>
     )
 }

@@ -1,21 +1,25 @@
 import React, { useState, useCallback } from "react"
-import { FormControl, Select, CheckIcon, Input, TextArea, Text, View } from "native-base"
-import { TextInput, Button, Platform, SafeAreaView } from "react-native"
+import { router } from "expo-router"
+import { View } from "native-base"
+import { TextInput, Button, Platform, SafeAreaView, ToastAndroid } from "react-native"
 import uuid from 'react-native-uuid'
 import FieldSelectKegiatan from "@/components/common/fields/field-select/FieldSelectKegiatan"
 import FieldInput from "@/components/common/fields/FieldInput"
 import FieldRuangLingkupSelect from "@/components/common/fields/field-select/FieldRuangLingkupSelect"
-import { FieldSasaranSelect } from "@/components/common"
+import { FieldImageUpload, FieldSasaranSelect } from "@/components/common"
 import { FieldTextArea } from "@/components/common"
 import { FieldDatePicker } from "@/components/common"
 import { FieldInputNumber } from "@/components/common"
-import { FieldImageUpload } from "@/components/common"
+import { useKegiatanPenyuluhanContext } from "@/context/kegiatan-penyuluhan/kegiatan-penyuluhan-context"
 
 import { useForm, FormProvider } from 'react-hook-form'
 import * as Yup from 'yup'
 import { yupResolver } from "@hookform/resolvers/yup"
 import { JenisKegiatanEnum } from "@/libs/enum"
-import { useKegiatanPenyuluhanUpsertOfflineMutation, KegiatanPenyuluhanPaginateListDocument } from "@/graphql"
+import {
+    useKegiatanPenyuluhanUpsertOfflineMutation,
+    KegiatanPenyuluhanPaginateListDocument
+} from "@/graphql"
 
 const validationSchema = Yup.object().shape({
     jenis: Yup.string().required('Jenis kegiatan penyuluhan wajib diisi'),
@@ -31,7 +35,7 @@ const validationSchema = Yup.object().shape({
 })
 
 const FieldSet: React.FC = () => {
-
+    const { refetch, loading: isLoading } = useKegiatanPenyuluhanContext()
     const methods = useForm({
         resolver: yupResolver(validationSchema),
         defaultValues: {
@@ -48,18 +52,17 @@ const FieldSet: React.FC = () => {
         },
 
     })
-
     const [upsert, { error, loading }] =
         useKegiatanPenyuluhanUpsertOfflineMutation({
             update: (cache, { data }) => {
                 if (!data) return; // or throw an error, depending on your use case
-            
+
                 try {
                     const { kegiatanPenyuluhanUpsert } = data;
                     const { kegiatanPenyuluhanPaginateList } = cache.readQuery({
                         query: KegiatanPenyuluhanPaginateListDocument
                     }) as { kegiatanPenyuluhanPaginateList: any };
-            
+
                     cache.writeQuery({
                         query: KegiatanPenyuluhanPaginateListDocument,
                         data: {
@@ -80,10 +83,14 @@ const FieldSet: React.FC = () => {
             }
         })
 
+    function showToast() {
+        ToastAndroid.show('Data berhasil disimpan', ToastAndroid.SHORT)
+    }
+
     const onSubmit = async (data: any) => {
         const upsertId = uuid.v4()
         const tanggalPelaksanaan = new Date(data.date).toString()
-        const req = {
+        const req: any = {
             date: tanggalPelaksanaan,
             deskripsi: data.deskripsi,
             id: upsertId,
@@ -94,22 +101,18 @@ const FieldSet: React.FC = () => {
             tujuan: data.tujuan,
             jumlahPeserta: data.jumlahPeserta,
             tindakLanjut: data.tindakLanjut,
-            files: data.files
         }
-        
-        upsert({ 
-            variables: { 
-                data: req 
-            } 
+        await upsert({
+            variables: {
+                data: req
+            }
         })
-            .then(error => {
-                if (error) {
-                    console.log('error')
-                } else {
-                    console.log('success')
-                }
-            })
-
+        methods.reset()
+        router.push('/home?refresh=true')
+        refetch()
+    }
+    if (loading) {
+        showToast()
     }
 
 
@@ -171,6 +174,11 @@ const FieldSet: React.FC = () => {
                     label="Tindak Lanjut Kegiatan Penyuluhan (jika ada)"
                     placeholder="Silakan tulis tindak lanjut kegiatan penyuluhan disini."
                 />
+
+                {/* <FieldImageUpload 
+                    name="files"
+                    label="Unggah image"
+                /> */}
 
                 <Button title="Unggah Laporan" onPress={methods.handleSubmit(onSubmit)} />
             </FormProvider>
