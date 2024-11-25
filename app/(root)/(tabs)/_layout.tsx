@@ -13,7 +13,6 @@ import HomeScreen from "@/app/(root)/(tabs)/home";
 import ChatScreen from "@/app/(root)/(tabs)/chat";
 import ProfileScreen from "@/app/(root)/(tabs)/profile";
 import PustakaScreen from "@/app/(root)/(tabs)/pustaka";
-import CreateKegiatanPenyuluhanScreen from '@/app/(root)/(tabs)/CreateKegiatanPenyuluhan';
 import { KegiatanPenyuluhanContextProvider } from '@/context/kegiatan-penyuluhan/kegiatan-penyuluhan-context';
 
 const StyledView = styled(View)
@@ -91,19 +90,6 @@ function MainTab() {
           }}
         />
         <Tab.Screen
-          name='CreateKegiatanPenyuluhan'
-          component={CreateKegiatanPenyuluhanScreen}
-          options={{
-            title: "CreateKegiatanPenyuluhanScreen",
-            headerShown: false,
-            tabBarIcon: ({ color }) => (
-              <StyledView className="bg-[#6A5495] w-16 h-16 rounded-full items-center justify-center absolute -top-8">
-                <PlusCircleIcon color={color} size={30} />
-              </StyledView>
-            ),
-          }}
-        />
-        <Tab.Screen
           name="profile"
           component={ProfileScreen}
           options={{
@@ -173,7 +159,7 @@ const Layout = () => {
                 }}
               />
               <Tabs.Screen
-                name="CreateKegiatanPenyuluhan"
+                name="createKegiatanPenyuluhan"
                 options={{
                   title: "Create",
                   headerShown: false,
