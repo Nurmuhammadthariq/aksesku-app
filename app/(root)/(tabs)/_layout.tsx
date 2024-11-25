@@ -14,6 +14,7 @@ import ChatScreen from "@/app/(root)/(tabs)/chat";
 import ProfileScreen from "@/app/(root)/(tabs)/profile";
 import PustakaScreen from "@/app/(root)/(tabs)/pustaka";
 import CreateKegiatanPenyuluhanScreen from '../(tabs)/CreateKegiatanPenyuluhan'
+import { KegiatanPenyuluhanContextProvider } from '@/context/kegiatan-penyuluhan/kegiatan-penyuluhan-context';
 
 const StyledView = styled(View)
 const Tab = createBottomTabNavigator()
@@ -128,84 +129,80 @@ const Layout = () => {
   return (
     <GestureHandlerRootView>
       <BottomSheetModalProvider>
-        <Stack.Navigator>
-          <Stack.Screen
-            name='MainTabs'
-            component={MainTab}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-        {/* <Tabs
-
-          initialRouteName="home"
-          screenOptions={{
-            tabBarActiveTintColor: "#6A5495",
-            tabBarInactiveTintColor: "black",
-            tabBarShowLabel: false,
-            tabBarStyle: {
-              backgroundColor: "#F2F2F2",
-              borderTopWidth: 2,
-              borderRightWidth: 2,
-              borderLeftWidth: 2,
-              height: 80,
-              borderTopLeftRadius: 40,
-              borderTopRightRadius: 40,
-              paddingBottom: 20,
-              paddingTop: 10,
-              borderTopColor: '#D0B0E2',
-              borderRightColor: '#D0B0E2',
-              borderLeftColor: '#D0B0E2',
-              position: 'absolute',
-            },
-          }}
-        >
-          <Tabs.Screen
-            name="home"
-            options={{
-              title: "Home",
-              headerShown: false,
-              tabBarIcon: ({ color  }) => (
-                <HomeIcon color={color} size={30} />
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="chat"
-            options={{
-              title: "Chat",
-              headerShown: false,
-              tabBarIcon: ({ color }) => <EnvelopeIcon color={color} size={30} />,
-            }}
-          />
-          <Tabs.Screen
-            name="createKegiatanPenyuluhan"
-            options={{
-              title: "Create",
-              headerShown: false,
-              tabBarIcon: ({ color }) => (
-                <StyledView className="bg-[#6A5495] w-16 h-16 rounded-full items-center justify-center absolute -top-8">
-                  <PlusCircleIcon color={color} size={30} />
-                </StyledView>
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name="profile"
-            options={{
-              title: "Profile",
-              headerShown: false,
-              tabBarIcon: ({ color }) => <UserIcon color={color} size={30} />,
-            }}
-          />
-          <Tabs.Screen
-            name="pustaka"
-            options={{
-              title: "Pustaka",
-              headerShown: false,
-              tabBarIcon: ({ color }) => <AcademicCapIcon color={color} size={30} />,
-            }}
-          />
-        </Tabs> */}
+        <StaticDataContextProvider>
+          <KegiatanPenyuluhanContextProvider>
+            <Tabs
+              initialRouteName="home"
+              screenOptions={{
+                tabBarActiveTintColor: "#cecbd3",
+                tabBarInactiveTintColor: "black",
+                tabBarShowLabel: false,
+                tabBarStyle: {
+                  backgroundColor: "#F2F2F2",
+                  borderTopWidth: 2,
+                  borderRightWidth: 2,
+                  borderLeftWidth: 2,
+                  height: 80,
+                  borderTopLeftRadius: 40,
+                  borderTopRightRadius: 40,
+                  paddingBottom: 20,
+                  paddingTop: 10,
+                  borderTopColor: '#D0B0E2',
+                  borderRightColor: '#D0B0E2',
+                  borderLeftColor: '#D0B0E2',
+                  position: 'absolute',
+                },
+              }}
+            >
+              <Tabs.Screen
+                name="home"
+                options={{
+                  title: "Home",
+                  headerShown: false,
+                  tabBarIcon: ({ color }) => (
+                    <HomeIcon color={color} size={30} />
+                  ),
+                }}
+              />
+              <Tabs.Screen
+                name="chat"
+                options={{
+                  title: "Chat",
+                  headerShown: false,
+                  tabBarIcon: ({ color }) => <EnvelopeIcon color={color} size={30} />,
+                }}
+              />
+              <Tabs.Screen
+                name="CreateKegiatanPenyuluhan"
+                options={{
+                  title: "Create",
+                  headerShown: false,
+                  tabBarIcon: ({ color }) => (
+                    <StyledView className="bg-[#6A5495] w-16 h-16 rounded-full items-center justify-center absolute -top-8">
+                      <PlusCircleIcon color={color} size={30} />
+                    </StyledView>
+                  ),
+                }}
+              />
+              <Tabs.Screen
+                name="profile"
+                options={{
+                  title: "Profile",
+                  headerShown: false,
+                  tabBarIcon: ({ color }) => <UserIcon color={color} size={30} />,
+                }}
+              />
+              <Tabs.Screen
+                name="pustaka"
+                options={{
+                  title: "Pustaka",
+                  headerShown: false,
+                  tabBarIcon: ({ color }) => <AcademicCapIcon color={color} size={30} />,
+                }}
+              />
+            </Tabs>
+          </KegiatanPenyuluhanContextProvider>
+        </StaticDataContextProvider>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );
