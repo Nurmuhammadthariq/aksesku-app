@@ -81,7 +81,7 @@ export const AuthContextProvider = ({ children }: PropsWithChildren) => {
         update(s => {
             s.loading = false
         })
-        router.replace('/')
+        router.replace('/sign-in')
     }
 
     return (
