@@ -1,7 +1,5 @@
 import { useState, useContext } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller } from 'react-hook-form'
-import { router } from 'expo-router';
 import {
     View,
     Text,
