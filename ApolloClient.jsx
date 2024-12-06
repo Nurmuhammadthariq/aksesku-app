@@ -2,18 +2,18 @@ import { ApolloClient, InMemoryCache, HttpLink, ApolloLink } from "@apollo/clien
 import { setContext } from "@apollo/client/link/context";
 
 const authLink = setContext((_, { headers }) => {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRhZjU5NWMzLTYyNTMtNDJjYy1iYjZlLTFiZjEyZjllNzU5MyIsInVzZXJuYW1lIjoidGhvcmlxIiwiZnVsbE5hbWUiOiJOdXIgTXVoYW1tYWQgVGhhcmlxIiwiaXNBc2Vzb3IiOmZhbHNlLCJpYXQiOjE3MjYyMTU0MjksImV4cCI6MTc1Nzc1MTQyOSwiYXVkIjoidXJuOmF1ZGllbmNlOm1vbmV2cGFrIiwiaXNzIjoidXJuOmlzc3Vlcjptb25ldnBhayJ9.dW3XULgLEs79DpfGJFxSow31TXk_hZ4J2u24fQoJM8g'
-    
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ1ZGFjNGMwLTQxYWEtNDBkYy05ZDdkLTEwYjRlNjE3MWUzNyIsInVzZXJuYW1lIjoidGhvcmlxIiwiZnVsbE5hbWUiOiJOdXIgTXVoYW1tYWQgVGhvcmlxIiwiaXNBc2Vzb3IiOmZhbHNlLCJpYXQiOjE3MzExNDQxNzUsImV4cCI6MTc2MjY4MDE3NSwiYXVkIjoidXJuOmF1ZGllbmNlOm1vbmV2cGFrIiwiaXNzIjoidXJuOmlzc3Vlcjptb25ldnBhayJ9.W6mijEmOquJWUIRiVTcYfWZ_gWEGLOFgbW8tnc5uoFs'
+
     return {
         headers: {
             ...headers,
-            authorization:  `Bearer ${token}`,
+            authorization: `Bearer ${token}`,
         },
     };
 });
 
-const httpLink = new HttpLink({ 
-    uri: 'https://aksesku.kpk.go.id/graphql' 
+const httpLink = new HttpLink({
+    uri: `${process.env.EXPO_PUBLIC_SERVER_URL}:4848/graphql`
 });
 
 const link = ApolloLink.from([authLink, httpLink]);
