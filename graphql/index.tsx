@@ -648,3 +648,172 @@ export function useKegiatanPenyuluhanPaginateListMobileQuery(
     KegiatanPenyuluhanPaginateListMobileQueryVariables
   >(KegiatanPenyuluhanPaginateListMobileDocument, options)
 }
+
+
+/**
+ * __usePenyuluhGetPenyuluhByUserIdQuery__
+ *
+ * To run a query within a React component, call `usePenyuluhGetPenyuluhByUserIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePenyuluhGetPenyuluhByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePenyuluhGetPenyuluhByUserIdQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export type KabupatenObjectType = {
+  __typename?: 'KabupatenObjectType'
+  provinsi: IdNamaObjectType
+  id: Scalars['String']
+  nama: Scalars['String']
+}
+
+export type RewardSummaryObjectType = {
+  __typename?: 'RewardSummaryObjectType'
+  id: Scalars['String']
+  nama: Scalars['String']
+  value: Scalars['Float']
+  image?: Maybe<Scalars['String']>
+}
+
+export type PenyuluhObjectType = {
+  __typename?: 'PenyuluhObjectType'
+  id: Scalars['String']
+  nik?: Maybe<Scalars['String']>
+  nsp?: Maybe<Scalars['String']>
+  nama: Scalars['String']
+  jenjang?: Maybe<Scalars['Int']>
+  institusi?: Maybe<Scalars['String']>
+  profesi?: Maybe<Scalars['String']>
+  alamat?: Maybe<Scalars['String']>
+  kabupaten?: Maybe<KabupatenObjectType>
+  provinsi?: Maybe<IdNamaObjectType>
+  email?: Maybe<Scalars['String']>
+  handphone?: Maybe<Scalars['String']>
+  username: Scalars['String']
+  totalPoin: Scalars['Float']
+  tempatLahir?: Maybe<Scalars['String']>
+  tanggalLahir?: Maybe<Scalars['DateTime']>
+  jenisKelamin?: Maybe<Scalars['Int']>
+  pendidikanTerakhir?: Maybe<Scalars['Int']>
+  thumbnail?: Maybe<Scalars['String']>
+  image?: Maybe<Scalars['String']>
+  imageFile?: Maybe<Scalars['Upload']>
+  rewards: Array<RewardSummaryObjectType>
+}
+
+export type PenyuluhGetPenyuluhByUserIdQueryVariables = Exact<{
+  userId: Scalars['String']
+}>
+
+
+export type PenyuluhGetPenyuluhByUserIdQuery = { __typename?: 'Query' } & {
+  penyuluhGetPenyuluhByUserId: { __typename?: 'PenyuluhObjectType' } & Pick<
+    PenyuluhObjectType,
+    | 'id'
+    | 'nik'
+    | 'nsp'
+    | 'nama'
+    | 'jenjang'
+    | 'institusi'
+    | 'profesi'
+    | 'alamat'
+    | 'email'
+    | 'handphone'
+    | 'username'
+    | 'totalPoin'
+    | 'tempatLahir'
+    | 'tanggalLahir'
+    | 'jenisKelamin'
+    | 'pendidikanTerakhir'
+    | 'thumbnail'
+    | 'image'
+    | 'imageFile'
+  > & {
+      kabupaten?: Maybe<
+        { __typename?: 'KabupatenObjectType' } & Pick<
+          KabupatenObjectType,
+          'id' | 'nama'
+        > & {
+            provinsi: { __typename?: 'IdNamaObjectType' } & Pick<
+              IdNamaObjectType,
+              'id' | 'nama'
+            >
+          }
+      >
+      provinsi?: Maybe<
+        { __typename?: 'IdNamaObjectType' } & Pick<
+          IdNamaObjectType,
+          'id' | 'nama'
+        >
+      >
+      rewards: Array<
+        { __typename?: 'RewardSummaryObjectType' } & Pick<
+          RewardSummaryObjectType,
+          'id' | 'nama' | 'value' | 'image'
+        >
+      >
+    }
+}
+
+export const PenyuluhGetPenyuluhByUserIdDocument = gql`
+  query penyuluhGetPenyuluhByUserId($userId: String!) {
+    penyuluhGetPenyuluhByUserId(userId: $userId) {
+      id
+      nik
+      nsp
+      nama
+      jenjang
+      institusi
+      profesi
+      alamat
+      kabupaten {
+        provinsi {
+          id
+          nama
+        }
+        id
+        nama
+      }
+      provinsi {
+        id
+        nama
+      }
+      email
+      handphone
+      username
+      totalPoin
+      tempatLahir
+      tanggalLahir
+      jenisKelamin
+      pendidikanTerakhir
+      thumbnail
+      image
+      imageFile
+      rewards {
+        id
+        nama
+        value
+        image
+      }
+    }
+  }
+`
+
+export function usePenyuluhGetPenyuluhByUserIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    PenyuluhGetPenyuluhByUserIdQuery,
+    PenyuluhGetPenyuluhByUserIdQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    PenyuluhGetPenyuluhByUserIdQuery,
+    PenyuluhGetPenyuluhByUserIdQueryVariables
+  >(PenyuluhGetPenyuluhByUserIdDocument, options)
+}

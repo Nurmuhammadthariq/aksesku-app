@@ -1,5 +1,6 @@
 import { UserIdentityDto, PenyuluhDto } from "../libs/dto";
 import { router } from 'expo-router'
+import { usePenyuluhGetPenyuluhByUserIdQuery } from "@/graphql";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwt from 'jsonwebtoken'
 import JWT from 'expo-jwt'
@@ -16,13 +17,15 @@ export interface AuthContextValue {
     signOut?(): void
     penyuluh?: PenyuluhDto
     updatePenyuluh?(): void
-    state:  {
+    state: {
         user?: UserIdentityDto;
         loading: boolean;
         penyuluh?: PenyuluhDto;
     }
     isAuthenticated?: boolean,
-    token?: string | null
+    token?: string | null;
+    setChatId?(chatId: string): void;
+    chatId?: string
 }
 
 export const AuthContext = React.createContext<AuthContextValue>({} as AuthContextValue)
@@ -30,17 +33,18 @@ export const AuthContext = React.createContext<AuthContextValue>({} as AuthConte
 export const AuthContextProvider = ({ children }: PropsWithChildren) => {
     const hasToken = !getItem()
     const [state, update] = useImmer<{
-        user?: UserIdentityDto 
+        user?: UserIdentityDto
         loading: boolean
         penyuluh?: PenyuluhDto,
         token: null | string,
-        isAuthenticated: boolean
+        isAuthenticated: boolean,
+        chatId?: string,
     }>({
         loading: true,
         isAuthenticated: false,
-        token: null
+        token: null,
     });
-    const { user, loading, penyuluh, token, isAuthenticated } = state;
+    const { user, loading, penyuluh, token, isAuthenticated, chatId } = state;
 
     useEffect(() => {
         (async () => {
@@ -61,14 +65,14 @@ export const AuthContextProvider = ({ children }: PropsWithChildren) => {
         })()
     }, [])
 
-   
-    
+
+
     const signIn = (token: string) => {
         setToken(token)
         console.log('this is function sign in')
         const res: any = decodeToken(token)
         // console.log(res)
-        
+
         update(s => {
             s.user = res
             s.loading = true
@@ -84,9 +88,25 @@ export const AuthContextProvider = ({ children }: PropsWithChildren) => {
         router.replace('/sign-in')
     }
 
+    const setChatId = (chatId: string) => {
+        update(s => {
+            s.chatId = chatId
+        })
+    }
+
     return (
         <AuthContext.Provider
-            value={{ user, loading, penyuluh, signIn, state, token, isAuthenticated, signOut}}
+            value={{
+                user,
+                loading,
+                penyuluh,
+                signIn,
+                state, token,
+                isAuthenticated,
+                signOut,
+                setChatId,
+                chatId
+            }}
         >
             {children}
         </AuthContext.Provider>
