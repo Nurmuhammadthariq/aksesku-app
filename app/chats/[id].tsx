@@ -44,7 +44,7 @@ const DetailChatPage = () => {
   }, [id])
 
   useEffect(() => {
-    socket.current = io("http://192.168.250.37:8800");
+    socket.current = io("http://192.168.207.236:8800");
     socket.current.on("recieve-message", (data) => {
       console.log('data', data)
       setReceivedMessage(data);
@@ -54,7 +54,7 @@ const DetailChatPage = () => {
   }, []);
 
   useEffect(() => {
-    socket.current = io("http://192.168.250.37:8800");
+    socket.current = io("http://192.168.207.236:8800");
     socket.current.emit("new-user-add", user?.id);
     socket.current.on("get-users", (users) => {
       // console.log(users)
